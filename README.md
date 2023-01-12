@@ -23,11 +23,11 @@ projects:
   - name: ace-demo-sap-unittest
     source:
       type: git
-      location: 'https://github.com/trevor-dolby-at-ibm-com/ace-demo-sap-unittest'
+      location: 'https://github.com/tdolby-at-uk-ibm-com/ace-demo-sap-unittest'
 components:
   - alias: ace-v12
     type: dockerimage
-    image: 'tdolby/experimental:ace-dev-spaces-container-12.0.7.0'
+    image: 'tdolby/experimental:ace-dev-spaces-container-12.0.4.0'
     memoryLimit: 2048Mi
     env:
       - name: LICENSE
