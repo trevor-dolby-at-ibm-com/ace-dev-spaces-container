@@ -44,6 +44,6 @@ components:
 replacing the image name with the location of the container built from the
 Dockerfile in this repo, and the "location" field with the GitHub repo name.
 
-The Dev Spaces code will handle pulling the GitHub code into the workspace, and
-so GitLab and other source code repositories can also be used, depending on the
-configuration of the Dev Spaces environment itself.
+The Dev Spaces infrastructure will handle cloning the GitHub repo into the 
+workspace, and so GitLab and other source code repositories can also be used,
+depending on the configuration of the Dev Spaces environment itself.
