@@ -6,17 +6,15 @@ MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 #
 # docker build -t ace-dev-spaces-container:12.0.4.0 -f Dockerfile .
 
-ARG DOWNLOAD_URL=http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.4.0-ACE-LINUX64-DEVELOPER.tar.gz
-ARG PRODUCT_LABEL=ace-12.0.4.0
-
-ARG MQ_DOWNLOAD_URL=http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/9.3.1.0-IBM-MQC-Redist-LinuxX64.tar.gz
+ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.4.0-ACE-LINUX64-DEVELOPER.tar.gz
+ARG MQ_DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/9.3.2.0-IBM-MQC-Redist-LinuxX64.tar.gz
 
 
 # Install ACE and accept the license
 RUN mkdir /opt/ibm && \
     echo Downloading package ${DOWNLOAD_URL} && \
     curl ${DOWNLOAD_URL} | tar zx --exclude 'ace-12.0.*.0/tools' --directory /opt/ibm && \
-    mv /opt/ibm/${PRODUCT_LABEL} /opt/ibm/ace-12 && \
+    mv /opt/ibm/ace-12.* /opt/ibm/ace-12 && \
     /opt/ibm/ace-12/ace make registry global accept license deferred
 
 # Source profile automatically; requires LICENSE to be set to "accept"
