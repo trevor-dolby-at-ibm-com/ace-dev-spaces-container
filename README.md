@@ -53,36 +53,43 @@ docker build -t ace-dev-spaces-container-xvnc-12.0.4.0 -f Dockerfile.xvnc .
 followed by tagging and pushing the container. The resulting public image tag should be 
 used in the configuration below instead of the experimental image shown.
 
+Note that later versions are available; see https://github.com/trevor-dolby-at-ibm-com/ace-docker/tree/main/experimental#setting-the-correct-product-url
+for instructions on how to find the URL if the public site has not been updated. Use the
+resulting URL as the DOWNLOAD_URL build argument when building the container.
+
 ## GitHub repo enablement
 
 Create a `.devfile.yaml` file in the root directory of a repo with contents similar to 
 the following (for a non-toolkit Dev Space):
 
 ```
-apiVersion: 1.0.0
+schemaVersion: 2.2.0
 metadata:
-  name: ace-demo-sap-unittest
+  name: ace-bdd-cucumber
 projects:
-  - name: ace-demo-sap-unittest
-    source:
-      type: git
-      location: 'https://github.com/tdolby-at-uk-ibm-com/ace-demo-sap-unittest'
+  - name: ace-bdd-cucumber
+    git:
+      remotes:
+        origin: 'https://github.com/tdolby-at-uk-ibm-com/ace-bdd-cucumber'
+      checkoutFrom:
+        revision: main
 components:
-  - alias: ace-v12
-    type: dockerimage
-    image: 'tdolby/experimental:ace-dev-spaces-container-12.0.4.0'
-    memoryLimit: 2048Mi
-    env:
-      - name: LICENSE
-        value: accept
-    endpoints:
-      - name: server
-        port: 7600
-        attributes:
-          discoverable: 'true'
-          public: 'true'
-          protocol: 'http'
-    mountSources: true
+  - name: ace-v12
+    container:
+      image: 'tdolby/experimental:ace-dev-spaces-container-xvnc-12.0.8.0'
+      memoryLimit: 2048Mi
+      cpuLimit: 1000m
+      env:
+        - name: LICENSE
+          value: accept
+      endpoints:
+        - name: server
+          targetPort: 7600
+          attributes:
+            discoverable: 'true'
+            public: 'true'
+            protocol: 'http'
+      mountSources: true
 ```
 replacing the image name with the location of the container built from the
 Dockerfile in this repo, and the "location" field with the GitHub repo name.
@@ -107,8 +114,12 @@ field of the the `Create Workspace` page:
 ## Building and testing with vscode and commands
 
 The container will start up once the image has been downloaded and vscode will start
-automatically. A terminal window is needed to run Maven or other commands, and this 
-can be launched from the menu in the top left corner:
+automatically. On slower clusters, the webserver may not be available before the web
+page tries to load, and a 404 "not found" may be seen. Waiting a minute and then reloading
+should solve this issue, and vscode will then be visible.
+
+A terminal window is needed to run Maven or other commands, and this can be launched
+from the menu in the top left corner:
 
 ![new terminal](/images/dev-spaces-new-terminal.png)
 
@@ -150,23 +161,11 @@ using the `run-vnc.sh` script:
 
 Enter a password at the prompt, say "no" the the view-only password, and the server should then
 start in the background. A pop-up is likely to appear stating that a server is listening on port
-5901 (and/or port 6080) but the vscode port forwarding does not seem to work with OpenShift routes
-and so the pop-ups should be ignored. The correct URL is printed out by the script, and should
-look similar to the following:
-```
-========================================================================
+5901 and then port 6080; click "Yes" on port 6080 to allow access to the VNC webserver. The VNC
+page can be opened by clicking on the subsequent pop-up, or the URL for port 6080 can be copied
+from the "ENDPOINTS" section in the bottom-right corner.
 
-
-Connect to one of the following URLs to access the virtual desktop:
-https://workspace64f96588ef374454-2.apps.openshift-cluster.provider.com
-http://workspace64f96588ef374454-2.apps.openshift-cluster.provider.com
-
-
-========================================================================
-```
-where the choice of https or http depends on the Dev Space infrastructure configuration.
-
-Once the correct URL has been determined, the resulting page will have a "connect" button
+Once the correct URL has been established, the resulting page will have a "connect" button
 which will connect to the VNC server, at which point the password entered earlier will be
 needed to access the virtual X-Windows desktop. A terminal window should already be started,
 and the ACE product is in /opt/ibm/ace-12 so running
