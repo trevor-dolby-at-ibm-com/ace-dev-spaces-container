@@ -82,13 +82,6 @@ components:
       env:
         - name: LICENSE
           value: accept
-      endpoints:
-        - name: server
-          targetPort: 7600
-          attributes:
-            discoverable: 'true'
-            public: 'true'
-            protocol: 'http'
       mountSources: true
 ```
 replacing the image name with the location of the container built from the
