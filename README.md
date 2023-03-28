@@ -97,6 +97,10 @@ See https://github.com/tdolby-at-uk-ibm-com/ace-bdd-cucumber/blob/main/.devfile.
 for an equivalent toolkit-enabled example, which uses the `-xvnc` container
 variant with a different workspace name and URL.
 
+Note that adding port 6080 as an endpoint (for the toolkit enablement below) 
+does not work, as the resulting port forwarding does not appear to be compatible
+in some way. The vscode port forwarding does work, as described below.
+
 The Dev Spaces infrastructure will handle cloning the GitHub repo into the 
 workspace, and so GitLab and other source code repositories can also be used,
 depending on the configuration of the Dev Spaces environment itself.
